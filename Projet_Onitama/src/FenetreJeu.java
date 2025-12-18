@@ -4,6 +4,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -21,6 +22,8 @@ public class FenetreJeu extends javax.swing.JFrame {
     private CarteDeplacement carteSelectionnee = null;
     private final String ImagesCartesChemin
             = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Cartes/";
+    private final String ImagesPiecesChemin
+            = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Pieces/";
 
     /**
      * Creates new form FenetreJeu
@@ -42,7 +45,9 @@ public class FenetreJeu extends javax.swing.JFrame {
         initComponents();
         jeu = new Jeu();
         initialiserPlateauGraphique();
-        mettreAJourAffichage();
+        SwingUtilities.invokeLater(() -> {
+            mettreAJourAffichage();
+        });
         btnRejouer.setVisible(false);
     }
 
@@ -106,6 +111,9 @@ public class FenetreJeu extends javax.swing.JFrame {
 
                 JButton btn = new JButton();
                 btn.setFocusable(false);
+                btn.setPreferredSize(new java.awt.Dimension(80, 80));
+                btn.setMaximumSize(new java.awt.Dimension(80, 80));
+                btn.setMinimumSize(new java.awt.Dimension(80, 80));
 
                 boutons[x][y] = btn;
 
@@ -138,23 +146,34 @@ public class FenetreJeu extends javax.swing.JFrame {
                 Piece piece = p.getCase(x, y);
 
                 if (piece == null) {
+                    boutons[x][y].setIcon(null);
                     boutons[x][y].setText("");
                 } else {
-                    String txt = "";
+
+                    String fichier = "";
 
                     if (piece.getType() == Piece.Type.Roi) {
-                        txt += "R";
+                        fichier += "R"; //Roi
                     } else {
-                        txt += "P";
+                        fichier += "P"; //Pion
                     }
 
                     if (piece.getCouleur() == Piece.Couleur.Rouge) {
-                        txt += "R";
+                        fichier += "R"; //Rouge
                     } else {
-                        txt += "B";
+                        fichier += "B"; //Bleu
                     }
+                    String chemin = ImagesPiecesChemin + fichier + ".png";
 
-                    boutons[x][y].setText(txt);
+                    int w2 = boutons[x][y].getWidth();
+                    int h2 = boutons[x][y].getHeight();
+
+                    ImageIcon icon = new ImageIcon(
+                            new ImageIcon(chemin).getImage().getScaledInstance(w2, h2, Image.SCALE_SMOOTH)
+                    );
+
+                    boutons[x][y].setIcon(icon);
+                    boutons[x][y].setText("");
                 }
             }
             Joueur j = jeu.getJoueurActuel();
@@ -322,47 +341,47 @@ public class FenetreJeu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(lblTour, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(102, 102, 102)
+                .addComponent(btnRejouer)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(panelPlateau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCarte1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnRejouer)
-                                .addGap(183, 183, 183)))
+                        .addComponent(btnCarte1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnCarte2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 198, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(btnCarteCentre)
                 .addGap(31, 31, 31))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCarte1, btnCarte2, btnCarteCentre});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(lblTour)
-                        .addGap(38, 38, 38)
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTour)
+                            .addComponent(btnRejouer))
+                        .addGap(32, 32, 32)
                         .addComponent(panelPlateau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(283, 283, 283)
                         .addComponent(btnCarteCentre)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnRejouer))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCarte1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                            .addComponent(btnCarte2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                    .addComponent(btnCarte1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCarte2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnCarte1, btnCarte2, btnCarteCentre});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
