@@ -67,10 +67,19 @@ public class Jeu {
 
         boolean mouvementValide = false;
 
-        //Vérifier que le déplacement correspond à la carte
+        //Ici aussi faut inversé pour bleu
         for (int[] d : dep) {
-            int nx = x + d[0];
-            int ny = y + d[1];
+
+            int dx = d[0];
+            int dy = d[1];
+
+            if (p.getCouleur() == Piece.Couleur.Bleu) {
+                dx = -dx;
+                dy = -dy;
+            }
+
+            int nx = x + dx;
+            int ny = y + dy;
 
             if (nx == destX && ny == destY) {
                 mouvementValide = true;

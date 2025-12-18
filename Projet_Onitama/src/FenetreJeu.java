@@ -1,5 +1,7 @@
 
 import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -17,10 +19,25 @@ public class FenetreJeu extends javax.swing.JFrame {
     private Jeu jeu;
     private Piece pieceSelectionnee = null;
     private CarteDeplacement carteSelectionnee = null;
+    private final String ImagesCartesChemin
+            = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Cartes/";
 
     /**
      * Creates new form FenetreJeu
      */
+    private ImageIcon chargerImage(String chemin, int w, int h) {
+        java.io.File f = new java.io.File(chemin);
+
+        if (!f.exists()) {
+            System.out.println("Image introuvable : " + chemin);
+            return null;
+        }
+
+        ImageIcon icon = new ImageIcon(f.getAbsolutePath());
+        Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+
     public FenetreJeu() {
         initComponents();
         jeu = new Jeu();
@@ -33,27 +50,27 @@ public class FenetreJeu extends javax.swing.JFrame {
         Plateau p = jeu.getPlateau();
         Piece piece = p.getCase(x, y);
 
-        // 1) Si aucune pièce n’est encore sélectionnée
+        // 1) Si aucune pièce n’est encore selectionnee
         if (pieceSelectionnee == null && carteSelectionnee != null) {
-            
+
             System.out.println(
-        "DEBUG → pièce=" + piece +
-        " | couleur pièce=" + (piece != null ? piece.getCouleur() : "null") +
-        " | couleur joueur actuel=" + jeu.getJoueurActuel().getCouleur()
-    );
+                    "DEBUG → piece=" + piece
+                    + " | couleur piece=" + (piece != null ? piece.getCouleur() : "null")
+                    + " | couleur joueur actuel=" + jeu.getJoueurActuel().getCouleur()
+            );
 
             // Vérifier qu'il y a bien une pièce ET qu'elle appartient au joueur
             if (piece != null && piece.getCouleur() == jeu.getJoueurActuel().getCouleur()) {
                 boutons[x][y].setBackground(Color.CYAN);
 
                 pieceSelectionnee = piece; // on la sélectionne
-                System.out.println("Pièce sélectionnée : " + piece.getType());
+                System.out.println("Piece selectionnee : " + piece.getType());
 
                 // afficher les déplacements possibles
                 afficherDeplacementsPossibles(pieceSelectionnee, carteSelectionnee);
 
             } else {
-                System.out.println("Pas une pièce jouable.");
+                System.out.println("Pas une piece jouable.");
             }
 
             return;
@@ -108,9 +125,9 @@ public class FenetreJeu extends javax.swing.JFrame {
         }
 
         if (jeu.getJoueurActuel().getCouleur() == Piece.Couleur.Rouge) {
-            lblTour.setText("Tour du Joueur ROUGE");
+            lblTour.setText("Tour du Joueur Rouge");
         } else {
-            lblTour.setText("Tour du Joueur BLEU");
+            lblTour.setText("Tour du Joueur Bleu");
         }
 
         Plateau p = jeu.getPlateau();
@@ -141,16 +158,37 @@ public class FenetreJeu extends javax.swing.JFrame {
                 }
             }
             Joueur j = jeu.getJoueurActuel();
-            btnCarte1.setText(j.getCarte1().getNom());
-            btnCarte2.setText(j.getCarte2().getNom());
-            btnCarteCentre.setText(jeu.getCarteCentre().getNom());
+            CarteDeplacement c1 = j.getCarte1();
+            CarteDeplacement c2 = j.getCarte2();
+            CarteDeplacement cc = jeu.getCarteCentre();
+
+            int w = btnCarte1.getWidth();
+            int h = btnCarte1.getHeight();
+
+            btnCarte1.setIcon(chargerImage(
+                    ImagesCartesChemin + c1.getNom().toLowerCase() + ".jpg",
+                    w, h
+            ));
+            btnCarte1.setText("");
+
+            btnCarte2.setIcon(chargerImage(
+                    ImagesCartesChemin + c2.getNom().toLowerCase() + ".jpg",
+                    w, h
+            ));
+            btnCarte2.setText("");
+
+            btnCarteCentre.setIcon(chargerImage(
+                    ImagesCartesChemin + cc.getNom().toLowerCase() + ".jpg",
+                    w, h
+            ));
+            btnCarteCentre.setText("");
 
         }
     }
 
     private void carteCliquee(CarteDeplacement carte) {
         carteSelectionnee = carte;
-        System.out.println("Carte cliquée : " + carte.getNom());
+        System.out.println("Carte cliquee : " + carte.getNom());
     }
 
     private void afficherDeplacementsPossibles(Piece piece, CarteDeplacement carte) {
@@ -170,11 +208,21 @@ public class FenetreJeu extends javax.swing.JFrame {
         int x = piece.getX();
         int y = piece.getY();
 
-        // Pour chaque déplacement possible
+        boolean joueurBleu = (piece.getCouleur() == Piece.Couleur.Bleu);
+
         for (int[] d : carte.getMouvements()) {
 
-            int nx = x + d[0];
-            int ny = y + d[1];
+            int dx = d[0];
+            int dy = d[1];
+
+            //On doit inversé pour les bleus
+            if (joueurBleu) {
+                dx = -dx;
+                dy = -dy;
+            }
+
+            int nx = x + dx;
+            int ny = y + dy;
 
             // On vérifie que la case est dans le plateau
             if (jeu.getPlateau().estDansPlateau(nx, ny)) {
@@ -192,7 +240,7 @@ public class FenetreJeu extends javax.swing.JFrame {
         boolean ok = jeu.deplacer(pieceSelectionnee, carteSelectionnee, x, y);
 
         if (ok) {
-            System.out.println("Déplacement réussi !");
+            System.out.println("Deplacement reussi !");
             pieceSelectionnee = null;
             carteSelectionnee = null;
 
@@ -212,7 +260,7 @@ public class FenetreJeu extends javax.swing.JFrame {
             return;
 
         } else {
-            System.out.println("Déplacement impossible !");
+            System.out.println("Deplacement impossible !");
         }
     }
 
@@ -271,24 +319,26 @@ public class FenetreJeu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCarte1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCarte2))
-                    .addComponent(panelPlateau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addComponent(btnCarteCentre)
-                .addGap(31, 31, 31))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnRejouer))
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(lblTour, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelPlateau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCarte1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnRejouer)
+                                .addGap(183, 183, 183)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCarte2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 198, Short.MAX_VALUE)
+                .addComponent(btnCarteCentre)
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,12 +352,16 @@ public class FenetreJeu extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(283, 283, 283)
                         .addComponent(btnCarteCentre)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCarte1)
-                    .addComponent(btnCarte2))
                 .addGap(18, 18, 18)
-                .addComponent(btnRejouer))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnRejouer))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCarte1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                            .addComponent(btnCarte2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
 
         pack();
@@ -317,7 +371,7 @@ public class FenetreJeu extends javax.swing.JFrame {
         // TODO add your handling code here:
         carteSelectionnee = jeu.getJoueurActuel().getCarte1();
 
-        System.out.println("Carte sélectionnée : " + carteSelectionnee.getNom());
+        System.out.println("Carte selectionnee : " + carteSelectionnee.getNom());
 
         resetCouleurs();
 
@@ -336,7 +390,7 @@ public class FenetreJeu extends javax.swing.JFrame {
         // TODO add your handling code here:
         carteSelectionnee = jeu.getJoueurActuel().getCarte2();
 
-        System.out.println("Carte sélectionnée : " + carteSelectionnee.getNom());
+        System.out.println("Carte selectionnee : " + carteSelectionnee.getNom());
 
         resetCouleurs();
 
