@@ -55,43 +55,41 @@ public class FenetreJeu extends javax.swing.JFrame {
         Plateau p = jeu.getPlateau();
         Piece piece = p.getCase(x, y);
 
-        // 1) Si aucune pièce n’est encore selectionnee
+        // 1) Aucune pièce sélectionnée mais une carte a été choisie -> sélectionner une pièce
         if (pieceSelectionnee == null && carteSelectionnee != null) {
 
-            System.out.println(
-                    "DEBUG → piece=" + piece
-                    + " | couleur piece=" + (piece != null ? piece.getCouleur() : "null")
-                    + " | couleur joueur actuel=" + jeu.getJoueurActuel().getCouleur()
-            );
-
-            // Vérifier qu'il y a bien une pièce ET qu'elle appartient au joueur
             if (piece != null && piece.getCouleur() == jeu.getJoueurActuel().getCouleur()) {
+                pieceSelectionnee = piece;
+                resetCouleurs();
                 boutons[x][y].setBackground(Color.CYAN);
 
-                pieceSelectionnee = piece; // on la sélectionne
-                System.out.println("Piece selectionnee : " + piece.getType());
-
-                // afficher les déplacements possibles
                 afficherDeplacementsPossibles(pieceSelectionnee, carteSelectionnee);
-
-            } else {
-                System.out.println("Pas une piece jouable.");
-            }
-
-            return;
-        }
-        // 2) Si une pièce est déjà sélectionnée → on tente un déplacement
-        if (pieceSelectionnee != null && carteSelectionnee != null) {
-
-            // Si la case cliquée n'est pas la pièce elle-même
-            if (!(pieceSelectionnee.getX() == x && pieceSelectionnee.getY() == y)) {
-
-                tenterDeplacement(x, y);
                 return;
             }
+
+            System.out.println("Pas une pièce jouable.");
+            return;
         }
 
+        // 2) Une pièce est déjà sélectionnée + une carte est choisie
+        if (pieceSelectionnee != null && carteSelectionnee != null) {
+
+            // 👉 CAS 1 : On clique sur une autre pièce de SON joueur → changer la sélection
+            if (piece != null && piece.getCouleur() == jeu.getJoueurActuel().getCouleur()) {
+                pieceSelectionnee = piece;
+                resetCouleurs();
+                boutons[x][y].setBackground(Color.CYAN);
+
+                afficherDeplacementsPossibles(pieceSelectionnee, carteSelectionnee);
+                return;
+            }
+
+            // 👉 CAS 2 : On clique ailleurs → tenter un déplacement
+            tenterDeplacement(x, y);
+            return;
+        }
     }
+
     private JButton[][] boutons = new JButton[5][5];
 
     private void resetCouleurs() {
