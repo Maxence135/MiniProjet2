@@ -14,6 +14,7 @@ public class Joueur {
     private ArrayList<Piece> pieces;
     private CarteDeplacement carte1;
     private CarteDeplacement carte2;
+    private Piece.Couleur couleur;
 
     public Joueur(ArrayList<Piece> pieces, CarteDeplacement carte1, CarteDeplacement carte2) {
         this.pieces = pieces;
@@ -39,5 +40,9 @@ public class Joueur {
         } else if (carte2 == ancienne) {
             carte2 = nouvelle;
         }
+    }
+    
+    public Piece.Couleur getCouleur(){
+        return couleur;
     }
 }
