@@ -7,6 +7,6 @@
  *
  * @author maxen
  */
-public class Jeu {
-
+public class ListeCartes {
+    
 }

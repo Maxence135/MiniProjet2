@@ -8,5 +8,25 @@
  * @author maxen
  */
 public class CarteDeplacement {
-    
+
+    private String nom;
+    private int[][] mouvements; // vecteurs (dx, dy)
+
+    public CarteDeplacement(String nom, int[][] mouvements) {
+        this.nom = nom;
+        this.mouvements = mouvements;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public int[][] getMouvements() {
+        return mouvements;
+    }
+
+    @Override
+    public String toString() {
+        return nom;
+    }
 }
