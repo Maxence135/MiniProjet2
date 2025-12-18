@@ -16,10 +16,11 @@ public class Joueur {
     private CarteDeplacement carte2;
     private Piece.Couleur couleur;
 
-    public Joueur(ArrayList<Piece> pieces, CarteDeplacement carte1, CarteDeplacement carte2) {
+    public Joueur(ArrayList<Piece> pieces, CarteDeplacement carte1, CarteDeplacement carte2, Piece.Couleur couleur) {
         this.pieces = pieces;
         this.carte1 = carte1;
         this.carte2 = carte2;
+        this.couleur = couleur;
     }
 
     public ArrayList<Piece> getPieces() {

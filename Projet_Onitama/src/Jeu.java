@@ -13,6 +13,7 @@ public class Jeu {
     private Plateau plateau;
     private Joueur joueurRouge;
     private Joueur joueurBleu;
+    private Joueur joueurActuel;
     private CarteDeplacement carteCentre;
     public boolean tourRouge = true;
     private boolean victoireRouge = false;
@@ -20,82 +21,104 @@ public class Jeu {
 
     public Jeu() {
         initialiserPartie();
+        joueurActuel = joueurBleu;
     }
 
     private void initialiserPartie() {
+
         plateau = new Plateau();
 
-        //LEs pieces rouges :
+        //Récupérer les pièces placées sur le plateau
         ArrayList<Piece> rouges = new ArrayList<>();
-        rouges.add(new Piece(Piece.Type.Roi, Piece.Couleur.Rouge, 4, 2));
-        for (int c = 0; c < 5; c++) {
-            if (c != 2) {
-                rouges.add(new Piece(Piece.Type.Roi, Piece.Couleur.Rouge, 4, c));
-            }
-        }
-
-        //Les pieces bleues :
         ArrayList<Piece> bleues = new ArrayList<>();
-        bleues.add(new Piece(Piece.Type.Roi, Piece.Couleur.Bleu, 4, 2));
-        for (int c = 0; c < 5; c++) {
-            if (c != 2) {
-                bleues.add(new Piece(Piece.Type.Roi, Piece.Couleur.Bleu, 4, c));
+
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                Piece p = plateau.getCase(x, y);
+                if (p != null) {
+                    if (p.getCouleur() == Piece.Couleur.Rouge) {
+                        rouges.add(p);
+                    } else {
+                        bleues.add(p);
+                    }
+                }
             }
         }
 
-        //Pour placer les pieces :
-        rouges.forEach(p -> plateau.placerPiece(p));
-        bleues.forEach(p -> plateau.placerPiece(p));
-
-        //Les cartes :
+        //Distribuer les cartes
         CarteDeplacement[] cartes = ListeCartes.getToutesLesCartes();
         List<CarteDeplacement> liste = Arrays.asList(cartes);
         Collections.shuffle(liste);
 
-        joueurRouge = new Joueur(rouges, liste.get(0), liste.get(1));
-        joueurBleu = new Joueur(bleues, liste.get(2), liste.get(3));
+        joueurRouge = new Joueur(rouges, liste.get(0), liste.get(1), Piece.Couleur.Rouge);
+        joueurBleu = new Joueur(bleues, liste.get(2), liste.get(3), Piece.Couleur.Bleu);
         carteCentre = liste.get(4);
+
+        joueurActuel = joueurBleu;
     }
 
     //Bouger les pieces :
-    public boolean deplacer(Piece p, CarteDeplacement carte, int indexMouv) {
-        int dx = carte.getMouvements()[indexMouv][0];
-        int dy = carte.getMouvements()[indexMouv][1];
+    public boolean deplacer(Piece p, CarteDeplacement carte, int destX, int destY) {
 
-        //Inverse pour JBleu :
-        if (p.getCouleur() == Piece.Couleur.Bleu) {
-            dx = -dx;
-        }
-        int nx = p.getX() + dx;
-        int ny = p.getY() + dy;
+        int x = p.getX();
+        int y = p.getY();
 
-        if (!plateau.estDansPlateau(nx, ny)) {
-            return false;
-        }
+        int[][] dep = carte.getMouvements();
 
-        Piece cible = plateau.getCase(nx, ny);
+        boolean mouvementValide = false;
 
-        if (cible != null && cible.getCouleur() == p.getCouleur()) {
-            return false;
-        }
+        //Vérifier que le déplacement correspond à la carte
+        for (int[] d : dep) {
+            int nx = x + d[0];
+            int ny = y + d[1];
 
-        plateau.deplacerPiece(p, nx, ny);
-
-        //Victoire 1 : capture du roi
-        if (cible != null && cible.getType() == Piece.Type.Roi) {
-            if (p.getCouleur() == Piece.Couleur.Rouge) {
-                victoireRouge = true;
-            } else {
-                victoireBleu = true;
+            if (nx == destX && ny == destY) {
+                mouvementValide = true;
+                break;
             }
         }
 
-        //Victoire 2 : temple
+        if (!mouvementValide) {
+            return false;
+        }
+
+        //Vérifier que la case est dans le plateau
+        if (!plateau.estDansPlateau(destX, destY)) {
+            return false;
+        }
+
+        Piece cible = plateau.getCase(destX, destY);
+
+        //Si une pièce adverse est là : capture
+        if (cible != null) {
+
+            //Interdit de capturer sa propre pièce
+            if (cible.getCouleur() == p.getCouleur()) {
+                return false;
+            }
+
+            //Si c'est le roi adverse : victoire
+            if (cible.getType() == Piece.Type.Roi) {
+                if (p.getCouleur() == Piece.Couleur.Rouge) {
+                    victoireRouge = true;
+                } else {
+                    victoireBleu = true;
+                }
+            }
+        }
+
+        //Déplacer la pièce
+        plateau.deplacerPiece(p, destX, destY);
+
+        //Condition de victoire "Temple"
         if (p.getType() == Piece.Type.Roi) {
-            if (p.getCouleur() == Piece.Couleur.Rouge && nx == 0 && ny == 2) {
+            //Roi rouge atteint le temple bleu (2,0)
+            if (p.getCouleur() == Piece.Couleur.Rouge && destX == 2 && destY == 0) {
                 victoireRouge = true;
             }
-            if (p.getCouleur() == Piece.Couleur.Bleu && nx == 4 && ny == 2) {
+
+            //Roi bleu atteint le temple rouge (2,4)
+            if (p.getCouleur() == Piece.Couleur.Bleu && destX == 2 && destY == 4) {
                 victoireBleu = true;
             }
         }
@@ -104,6 +127,7 @@ public class Jeu {
         echangerCarte(carte);
 
         //Changer joueur :
+        changerDeJoueur();
         tourRouge = !tourRouge;
         return true;
     }
@@ -112,7 +136,7 @@ public class Jeu {
         CarteDeplacement temp = carteCentre;
         carteCentre = carte;
 
-        if (tourRouge) {
+        if (joueurActuel == joueurRouge) {
             joueurRouge.remplacerCarte(carte, temp);
         } else {
             joueurBleu.remplacerCarte(carte, temp);
@@ -137,12 +161,19 @@ public class Jeu {
         return plateau;
     }
 
-    public Joueur getJoueurActuel() {
-        return tourRouge
-                ? joueurRouge : joueurBleu;
+    public void changerDeJoueur() {
+        if (joueurActuel == joueurRouge) {
+            joueurActuel = joueurBleu;
+        } else {
+            joueurActuel = joueurRouge;
+        }
     }
-    
-    public CarteDeplacement getCarteCentre(){
+
+    public Joueur getJoueurActuel() {
+        return joueurActuel;
+    }
+
+    public CarteDeplacement getCarteCentre() {
         return carteCentre;
     }
 }
