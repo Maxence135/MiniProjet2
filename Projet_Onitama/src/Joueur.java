@@ -35,6 +35,10 @@ public class Joueur {
         return carte2;
     }
 
+    public CarteDeplacement[] getCartes() {
+        return new CarteDeplacement[]{carte1, carte2};
+    }
+
     public void remplacerCarte(CarteDeplacement ancienne, CarteDeplacement nouvelle) {
         if (carte1 == ancienne) {
             carte1 = nouvelle;
@@ -42,8 +46,8 @@ public class Joueur {
             carte2 = nouvelle;
         }
     }
-    
-    public Piece.Couleur getCouleur(){
+
+    public Piece.Couleur getCouleur() {
         return couleur;
     }
 }
