@@ -86,6 +86,6 @@ Cette IA représente un niveau "facile". D’autres niveaux (moyen, avancé, min
 
 ## Crédits
 
-Projet réalisé par Maxence, dans le cadre du MiniProjet2.  
+Projet réalisé dans le cadre du MiniProjet2.  
 Images de pièces et fonds réalisées avec génération assistée.
 
