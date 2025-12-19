@@ -17,6 +17,7 @@ public class FenetreAccueil extends javax.swing.JFrame {
      * Creates new form FenetreAccueil
      */
     public FenetreAccueil() {
+        setContentPane(new BackgroundPanel("/Fonds/fond.png"));
         initComponents();
     }
 
@@ -29,15 +30,11 @@ public class FenetreAccueil extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelTitre = new javax.swing.JLabel();
         btnJouer = new javax.swing.JButton();
         btnRegles = new javax.swing.JButton();
         btnQuitter = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabelTitre.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabelTitre.setText("ONITAMA");
 
         btnJouer.setText("Joueur vs Joueur");
         btnJouer.addActionListener(new java.awt.event.ActionListener() {
@@ -69,19 +66,16 @@ public class FenetreAccueil extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnRegles)
                     .addComponent(btnJouer)
-                    .addComponent(btnQuitter)
-                    .addComponent(jLabelTitre))
+                    .addComponent(btnQuitter))
                 .addContainerGap(150, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnJouer, btnQuitter, btnRegles, jLabelTitre});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnJouer, btnQuitter, btnRegles});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabelTitre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addContainerGap(141, Short.MAX_VALUE)
                 .addComponent(btnJouer)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegles)
@@ -148,6 +142,5 @@ public class FenetreAccueil extends javax.swing.JFrame {
     private javax.swing.JButton btnJouer;
     private javax.swing.JButton btnQuitter;
     private javax.swing.JButton btnRegles;
-    private javax.swing.JLabel jLabelTitre;
     // End of variables declaration//GEN-END:variables
 }
