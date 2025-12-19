@@ -1,5 +1,6 @@
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,6 +25,8 @@ public class FenetreJeu extends javax.swing.JFrame {
             = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Cartes/";
     private final String ImagesPiecesChemin
             = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Pieces/";
+    private IA ia = null;
+    private boolean modeIA;
 
     /**
      * Creates new form FenetreJeu
@@ -41,16 +44,37 @@ public class FenetreJeu extends javax.swing.JFrame {
         return new ImageIcon(img);
     }
 
-    public FenetreJeu(boolean iaActive) {
+    public FenetreJeu(boolean modeIA) {
         setContentPane(new BackgroundPanel("/Fonds/fond.png"));
+        this.modeIA = modeIA;
         initComponents();
+        fixerTailleBoutonsCartes();
         jeu = new Jeu();
+        if (modeIA) {
+            ia = new IA(jeu.getJoueurBleu(), jeu.getPlateau(), jeu);
+        }
         initialiserPlateauGraphique();
         SwingUtilities.invokeLater(() -> {
             mettreAJourAffichage();
         });
         btnRejouer.setVisible(false);
     }
+    
+    private void fixerTailleBoutonsCartes() {
+    Dimension dim = new Dimension(250, 105);
+
+    btnCarte1.setPreferredSize(dim);
+    btnCarte1.setMinimumSize(dim);
+    btnCarte1.setMaximumSize(dim);
+
+    btnCarte2.setPreferredSize(dim);
+    btnCarte2.setMinimumSize(dim);
+    btnCarte2.setMaximumSize(dim);
+
+    btnCarteCentre.setPreferredSize(dim);
+    btnCarteCentre.setMinimumSize(dim);
+    btnCarteCentre.setMaximumSize(dim);
+}
 
     private void caseCliquee(int x, int y) {
         Plateau p = jeu.getPlateau();
@@ -264,6 +288,16 @@ public class FenetreJeu extends javax.swing.JFrame {
 
             mettreAJourAffichage();
             resetCouleurs();
+
+            //Si mode IA et que c'est le tour du bleu
+            if (modeIA && jeu.getJoueurActuel().getCouleur() == Piece.Couleur.Bleu) {
+
+                //Lancer l'IA
+                ia.jouerTourFacile();
+
+                //mettre à jour l’ecran apres le coup de l'IA
+                mettreAJourAffichage();
+            }
         }
 
         if (jeu.estTermine()) {
@@ -326,7 +360,7 @@ public class FenetreJeu extends javax.swing.JFrame {
 
         lblTour.setText("jLabel1");
 
-        btnRejouer.setText("jButton1");
+        btnRejouer.setText("Recommencer");
         btnRejouer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRejouerActionPerformed(evt);

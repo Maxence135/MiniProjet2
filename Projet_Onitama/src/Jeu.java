@@ -21,7 +21,7 @@ public class Jeu {
 
     public Jeu() {
         initialiserPartie();
-        joueurActuel = joueurBleu;
+        joueurActuel = joueurRouge;
     }
 
     private void initialiserPartie() {
@@ -54,7 +54,7 @@ public class Jeu {
         joueurBleu = new Joueur(bleues, liste.get(2), liste.get(3), Piece.Couleur.Bleu);
         carteCentre = liste.get(4);
 
-        joueurActuel = joueurBleu;
+        joueurActuel = joueurRouge;
     }
 
     //Bouger les pieces :
@@ -180,6 +180,14 @@ public class Jeu {
 
     public Joueur getJoueurActuel() {
         return joueurActuel;
+    }
+
+    public Joueur getJoueurRouge() {
+        return joueurRouge;
+    }
+
+    public Joueur getJoueurBleu() {
+        return joueurBleu;
     }
 
     public CarteDeplacement getCarteCentre() {

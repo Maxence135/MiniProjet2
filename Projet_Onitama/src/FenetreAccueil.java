@@ -33,6 +33,7 @@ public class FenetreAccueil extends javax.swing.JFrame {
         btnJouer = new javax.swing.JButton();
         btnRegles = new javax.swing.JButton();
         btnQuitter = new javax.swing.JButton();
+        btnIA = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,34 +58,44 @@ public class FenetreAccueil extends javax.swing.JFrame {
             }
         });
 
+        btnIA.setText("Joueur vs IA");
+        btnIA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIAActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+                .addGap(139, 139, 139)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnIA)
                     .addComponent(btnRegles)
                     .addComponent(btnJouer)
                     .addComponent(btnQuitter))
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(141, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnJouer, btnQuitter, btnRegles});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnIA, btnJouer, btnQuitter, btnRegles});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(141, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(98, Short.MAX_VALUE)
+                .addComponent(btnIA)
+                .addGap(18, 18, 18)
                 .addComponent(btnJouer)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegles)
                 .addGap(18, 18, 18)
                 .addComponent(btnQuitter)
-                .addGap(42, 42, 42))
+                .addGap(40, 40, 40))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnJouer, btnQuitter, btnRegles});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnIA, btnJouer, btnQuitter, btnRegles});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -113,6 +124,12 @@ public class FenetreAccueil extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnQuitterActionPerformed
 
+    private void btnIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIAActionPerformed
+        // TODO add your handling code here:
+        new FenetreJeu(true).setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnIAActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -139,6 +156,7 @@ public class FenetreAccueil extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIA;
     private javax.swing.JButton btnJouer;
     private javax.swing.JButton btnQuitter;
     private javax.swing.JButton btnRegles;
