@@ -181,6 +181,7 @@ public class FenetreJeu extends javax.swing.JFrame {
                     } else {
                         fichier += "B"; //Bleu
                     }
+                    
                     String chemin = "/Pieces/" + fichier + ".png";
 
                     int w2 = boutons[x][y].getWidth();
