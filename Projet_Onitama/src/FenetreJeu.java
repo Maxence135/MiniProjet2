@@ -41,7 +41,7 @@ public class FenetreJeu extends javax.swing.JFrame {
         return new ImageIcon(img);
     }
 
-    public FenetreJeu() {
+    public FenetreJeu(boolean iaActive) {
         initComponents();
         jeu = new Jeu();
         initialiserPlateauGraphique();
@@ -457,7 +457,7 @@ public class FenetreJeu extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FenetreJeu().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FenetreJeu(false).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
