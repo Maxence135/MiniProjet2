@@ -21,10 +21,6 @@ public class FenetreJeu extends javax.swing.JFrame {
     private Jeu jeu;
     private Piece pieceSelectionnee = null;
     private CarteDeplacement carteSelectionnee = null;
-    private final String ImagesCartesChemin
-            = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Cartes/";
-    private final String ImagesPiecesChemin
-            = "C:/Users/maxen/Desktop/MiniProjet2JEU/MiniProjet2/Projet_Onitama/src/Pieces/";
     private IA ia = null;
     private boolean modeIA;
 
@@ -32,14 +28,13 @@ public class FenetreJeu extends javax.swing.JFrame {
      * Creates new form FenetreJeu
      */
     private ImageIcon chargerImage(String chemin, int w, int h) {
-        java.io.File f = new java.io.File(chemin);
-
-        if (!f.exists()) {
+        java.net.URL url = getClass().getResource(chemin);
+        if (url == null) {
             System.out.println("Image introuvable : " + chemin);
             return null;
         }
 
-        ImageIcon icon = new ImageIcon(f.getAbsolutePath());
+        ImageIcon icon = new ImageIcon(url);
         Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }
@@ -186,14 +181,13 @@ public class FenetreJeu extends javax.swing.JFrame {
                     } else {
                         fichier += "B"; //Bleu
                     }
-                    String chemin = ImagesPiecesChemin + fichier + ".png";
+                    String chemin = "/Pieces/" + fichier + ".png";
 
                     int w2 = boutons[x][y].getWidth();
                     int h2 = boutons[x][y].getHeight();
 
-                    ImageIcon icon = new ImageIcon(
-                            new ImageIcon(chemin).getImage().getScaledInstance(w2, h2, Image.SCALE_SMOOTH)
-                    );
+                    ImageIcon icon = chargerImage(chemin, w2, h2);
+                    
 
                     boutons[x][y].setIcon(icon);
                     boutons[x][y].setText("");
@@ -208,19 +202,19 @@ public class FenetreJeu extends javax.swing.JFrame {
             int h = btnCarte1.getHeight();
 
             btnCarte1.setIcon(chargerImage(
-                    ImagesCartesChemin + c1.getNom().toLowerCase() + ".jpg",
+                    "/Cartes/" + c1.getNom().toLowerCase() + ".jpg",
                     w, h
             ));
             btnCarte1.setText("");
 
             btnCarte2.setIcon(chargerImage(
-                    ImagesCartesChemin + c2.getNom().toLowerCase() + ".jpg",
+                    "/Cartes/" + c2.getNom().toLowerCase() + ".jpg",
                     w, h
             ));
             btnCarte2.setText("");
 
             btnCarteCentre.setIcon(chargerImage(
-                    ImagesCartesChemin + cc.getNom().toLowerCase() + ".jpg",
+                    "/Cartes/" + cc.getNom().toLowerCase() + ".jpg",
                     w, h
             ));
             btnCarteCentre.setText("");
