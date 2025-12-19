@@ -17,7 +17,7 @@ public class FenetreAccueil extends javax.swing.JFrame {
      * Creates new form FenetreAccueil
      */
     public FenetreAccueil() {
-        setContentPane(new BackgroundPanel("/Fonds/fond.png"));
+        setContentPane(new BackGroundPanel("/Fonds/fond.png"));
         initComponents();
     }
 

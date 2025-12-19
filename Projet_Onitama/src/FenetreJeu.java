@@ -42,7 +42,7 @@ public class FenetreJeu extends javax.swing.JFrame {
     }
 
     public FenetreJeu(boolean iaActive) {
-        setContentPane(new BackgroundPanel("/Fonds/fond.png"));
+        setContentPane(new BackGroundPanel("/Fonds/fond.png"));
         initComponents();
         jeu = new Jeu();
         initialiserPlateauGraphique();
